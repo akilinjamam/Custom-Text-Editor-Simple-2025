@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Text Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    .editor-container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .toolbar button, .toolbar select, .toolbar input[type="color"] {
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .toolbar button:hover {
+      background: #f0f0f0;
+    }
+    .editor {
+      min-height: 200px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      background: #fff;
+      outline: none;
+    }
+    .preview {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: #f8f8f8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="editor-container">
+  <h2>Custom Rich Text Editor</h2>
+
+  <div class="toolbar">
+    <button onclick="format('bold')"><b>B</b></button>
+    <button onclick="format('italic')"><i>I</i></button>
+    <button onclick="format('underline')"><u>U</u></button>
+    <button onclick="format('insertUnorderedList')">• List</button>
+
+    <select onchange="setFontSize(this)">
+      <option value="12px">12</option>
+      <option value="16px" selected>16</option>
+      <option value="20px">20</option>
+      <option value="24px">24</option>
+      <option value="32px">32</option>
+    </select>
+
+    <input type="color" onchange="setColor(this)">
+
+    <!-- Add this button and input to the toolbar -->
+  <input type="file" id="imageInput" accept="image/*" onchange="insertImage(this)" style="display: none;" />
+  <button onclick="document.getElementById('imageInput').click()">🖼️ Image</button>
+
+  </div>
+
+  <div id="editor" class="editor" contenteditable oninput="updatePreview()"></div>
+
+  <div class="preview">
+    <h3>Preview:</h3>
+    <div id="previewContent"></div>
+  </div>
+</div>
+
+<script>
+  function format(command) {
+    document.execCommand(command, false, null);
+    updatePreview();
+  }
+
+  function setColor(input) {
+    document.execCommand('foreColor', false, input.value);
+    updatePreview();
+  }
+
+  function setFontSize(select) {
+    document.execCommand('fontSize', false, 7); // placeholder size
+    const fonts = document.getElementsByTagName('font');
+    for (let i = 0; i < fonts.length; i++) {
+      if (fonts[i].size === '7') {
+        fonts[i].removeAttribute('size');
+        fonts[i].style.fontSize = select.value;
+      }
+    }
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const content = document.getElementById('editor').innerHTML;
+    document.getElementById('previewContent').innerHTML = content;
+  }
+
+  function insertImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.execCommand('insertImage', false, e.target.result);
+      updatePreview();
+    };
+    reader.readAsDataURL(file);
+
+    // Reset input to allow same file re-selection
+    input.value = '';
+  }
+
+</script>
+
+</body>
+</html>
