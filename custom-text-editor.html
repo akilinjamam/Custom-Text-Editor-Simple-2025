@@ -85,58 +85,10 @@
 
   <div class="preview">
     <h3>Preview:</h3>
-    <div id="previewContent"></div>
+    <div style="width: 100%"  id="previewContent"></div>
   </div>
 </div>
 
-<script>
-  function format(command) {
-    document.execCommand(command, false, null);
-    updatePreview();
-  }
-
-  function setColor(input) {
-    document.execCommand('foreColor', false, input.value);
-    updatePreview();
-  }
-
-  function setFontSize(select) {
-    document.execCommand('fontSize', false, 7); // placeholder size
-    const fonts = document.getElementsByTagName('font');
-    for (let i = 0; i < fonts.length; i++) {
-      if (fonts[i].size === '7') {
-        fonts[i].removeAttribute('size');
-        fonts[i].style.fontSize = select.value;
-      }
-    }
-    updatePreview();
-  }
-
-  function updatePreview() {
-    const content = document.getElementById('editor').innerHTML;
-    document.getElementById('previewContent').innerHTML = content;
-  }
-
-  function insertImage(input) {
-    const file = input.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      document.execCommand('insertImage', false, e.target.result);
-      updatePreview();
-    };
-    reader.readAsDataURL(file);
-
-    // Reset input to allow same file re-selection
-    input.value = '';
-  }
-  
-function setAlignment(align){
-  document.getElementById('editor').style.textAlign = align
-}
-
-</script>
-
+<script src="/index.js"></script>
 </body>
 </html>
