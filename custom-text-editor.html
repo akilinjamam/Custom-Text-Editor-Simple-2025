@@ -71,11 +71,14 @@
     </select>
 
     <input type="color" onchange="setColor(this)">
+    <select name="" id="" onchange="setAlignment(this.value)">
+      <option value="left">Text Align Left</option>
+      <option value="center">Text Align Center</option>
+    </select>
 
     <!-- Add this button and input to the toolbar -->
-  <input type="file" id="imageInput" accept="image/*" onchange="insertImage(this)" style="display: none;" />
+  <input  type="file" id="imageInput" accept="image/*" onchange="insertImage(this)" style="display: none;" />
   <button onclick="document.getElementById('imageInput').click()">🖼️ Image</button>
-
   </div>
 
   <div id="editor" class="editor" contenteditable oninput="updatePreview()"></div>
@@ -128,6 +131,10 @@
     // Reset input to allow same file re-selection
     input.value = '';
   }
+  
+function setAlignment(align){
+  document.getElementById('editor').style.textAlign = align
+}
 
 </script>
 
